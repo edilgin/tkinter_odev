@@ -2,7 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 import sqlite3 as sql
 from time import strftime
+# cinsiyet logo resimlerini göstermek için gerekli kütüphane
 from PIL import ImageTk,Image
+
+# Hocam database'i oluşturduğu yeri ayarlamazsanız göremeyebilirsiniz alttaki sql.connect("DataBase.db", isolation_level=None)
+# kısmında istediğiniz path'i yazabilirsiniz iyi günler :)
 
 # kaydet tuşuna basıldığında gerçekleşecek işlemlerin gerçekleştiği fonksiyon
 def kaydet():
@@ -21,13 +25,17 @@ def db_kaydet():
         cins = "kadın"
     else:
         cins = "belirtilmedi"
+
+    # ekranda yazılan verilerin gösterilmesi
     on_goster.config(state="normal")
-    on_goster.insert(tk.END, ad_entry.get() + " | " + soyad_entry.get() + " | " + cins + " |boy: "+ boy_entry.get() +" |kilo: "+ kilo_entry.get() +" |seker: "
-                     + seker_entry.get() + " | " + tel_entry.get() + " | " + email_entry.get() + "\n")
+    on_goster.insert(tk.END, ad_entry.get() + " | " + soyad_entry.get() + " | " + cins + " | "+ boy_entry.get() +" | "+ kilo_entry.get() +" | "
+                     + seker_entry.get() + " | " + tel_entry.get() + " | " + email_entry.get() + " |kayıt saati: " + saat["text"]+"\n")
+    # veri tabanı kayıtlama
     conn.execute("INSERT INTO Insan VALUES(?, ?, ?)", [ad_entry.get(), soyad_entry.get(),cins])
     conn.execute("INSERT INTO Fiziksel_Ozellik VALUES(?, ?, ?)", [boy_entry.get(), kilo_entry.get(), seker_entry.get()])
-    conn.execute("INSERT INTO Ulasim VALUES(?, ?)", [tel_entry.get(), email_entry.get()])
+    conn.execute("INSERT INTO Iletisim VALUES(?, ?, ?)", [tel_entry.get(), email_entry.get(),saat["text"]])
     on_goster.config(state="disabled")
+
 # şeker hastası mı kontrol edilecek
 def hasta_mi(deger):
     if deger > 126:
@@ -53,20 +61,19 @@ def bmi_seker(boy,kilo):
     else:
         bmiT.insert(tk.END, "morbid obezsiniz")
 
+#ekranda saati gösterelim
 def time():
     string = strftime('%H:%M:%S %p')
     saat.config(text = string)
     saat.after(1000, time)
-
 # ______________________________________________
 #       Data base ayarlamaları
 # ______________________________________________
 
-# DATA BASE MASAÜSTÜNDE OLUŞTURULACAK İSTENİRSE DEĞİŞTİRİLEBİLİR
-conn = sql.connect("C:\\Users\\fehim\Desktop\DataBase.db", isolation_level=None)
+conn = sql.connect("DataBase.db", isolation_level=None)
 conn.execute("CREATE TABLE IF NOT EXISTS Insan(Ad, Soyad, Cinsiyet)")
 conn.execute("CREATE TABLE IF NOT EXISTS Fiziksel_Ozellik(Boy, Kilo, AclikSeker)")
-conn.execute("CREATE TABLE IF NOT EXISTS Ulasim(tel_no, email)")
+conn.execute("CREATE TABLE IF NOT EXISTS Iletisim(tel_no, email, kayit_saati)")
 #--------------------------------------------------------
 #                   ANA EKRANI OLUŞTURALIM
 #----------------------------------------------------------
@@ -130,7 +137,7 @@ frame2.pack()
 bmiT = tk.Text(frame2, width=36, height=1, font="Times 15", relief="flat", bg="grey")
 bmiT.config(state="disabled")
 bmiT.grid(row=0, column=0, padx=10, pady=10)
-onizle = tk.Label(frame2, text="VERİ TABANI ÖN İZLEME: ", font="Times 13", background="grey")
+onizle = tk.Label(frame2, text="VERİ TABANI BÖYLE GÖZÜKECEK: ", font="Times 13", background="grey")
 onizle.grid(row=1, column=0, padx=10,pady=10)
 on_goster = tk.Text(frame2, height=10,width=100)
 on_goster.grid(row=2, column=0, padx=10, pady=10)
