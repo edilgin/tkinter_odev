@@ -17,6 +17,18 @@ def kaydet():
     bmi_seker(boy_deger, kilo_deger)
     hasta_mi(sek_deger)
     db_kaydet()
+    entry_temizle()
+
+# bir kişi kaydedince entryleri temizleyeceğiz
+def entry_temizle():
+    ad_entry.delete(0, 'end')
+    soyad_entry.delete(0, 'end')
+    email_entry.delete(0, 'end')
+    boy_entry.delete(0, 'end')
+    kilo_entry.delete(0, 'end')
+    seker_entry.delete(0, 'end')
+    tel_entry.delete(0, 'end')
+    okul_entry.delete(0, 'end')
 
 # veri tabanına kaydetme için kullanılacak fonksiyon
 def db_kaydet():
@@ -40,8 +52,8 @@ def hasta_mi(deger):
         bmiT.insert(tk.END,"  |  şeker hastasısınız")
     else:
         bmiT.insert(tk.END,"  |  şeker hastası değilsiniz")
-
     bmiT.config(state="disabled")
+
 # bmi kontrol edilecek değer yazılacak
 def bmi_seker(boy,kilo):
     bmiT.config(state="normal")
@@ -99,7 +111,7 @@ kilavuzText1 = tk.Label(kilavuzPen, text="yazan: \n Ahmet Fehim Örnek \n 119160
 kilavuzText1.pack()
 kilavuzText2 = tk.Label(kilavuzPen, text="kişi kaydederken bu kişinin şeker hastası olup olmadığı ve \n vücut kitle indeksi gösterilecektir\n", font=("Verdana", 10))
 kilavuzText2.pack()
-kilavuzText3 = tk.Label(kilavuzPen, text="data base'den kişi silmek için üstüne bastıktan sonra sil tuşuna basınız \n", font=("Verdana", 10))
+kilavuzText3 = tk.Label(kilavuzPen, text="data base'den kişi silmek için üstüne bastıktan sonra sil tuşuna basınız \n birden fazla kişi silmek için ctrl tuşunu kullanın", font=("Verdana", 10))
 kilavuzText3.pack()
 kilavuzText4 = tk.Label(kilavuzPen, text="kullandığım bazı kütüphaneler ve resimler sizde olmadığı için kodu kendi \n bilgisayarınızda çalıştırırken hata oluşabilir\n", font=("Verdana", 10))
 kilavuzText4.pack()
@@ -130,26 +142,13 @@ soyad = tk.Label(frame1, text="soyisim: ", font="Times 15", background="grey").g
 
 ad_entry = tk.Entry(frame1, font="Times 15")
 ad_entry.grid(row=0, column=1, padx=10, pady=10)
-soyad_entry = tk.Entry(frame1, font="Times 15")
-soyad_entry.grid(row=1, column=1, padx=10, pady=10)
-cinsVar = tk.IntVar()
-cinsiyet = tk.Label(frame1, text="cinsiyet: ", font="Times 15", background="grey").grid(row=4, column=0, padx=10,pady=10)
-
-boyut = (30, 30)
-im1 = Image.open('man_tr.png').resize(boyut)
-img1 = ImageTk.PhotoImage(im1)
-R2 = ttk.Radiobutton(frame1, image=img1, variable=cinsVar, value=1).grid(row=4, column=1, sticky="w")
-im2 = Image.open('woman_tr.png').resize(boyut)
-img2 = ImageTk.PhotoImage(im2)
-R3 = ttk.Radiobutton(frame1, image=img2, variable=cinsVar, value=2).grid(row=4, column=1, columnspan=1)
 email = tk.Label(frame1, text="email: ", font="Times 15", background="grey").grid(row=0, column=3, padx=10, pady=10)
 tel_no = tk.Label(frame1, text="telefon no:", font="Times 15", background="grey").grid(row=1, column=3, padx=10,pady=10)
 
 email_entry = tk.Entry(frame1, font="Times 15")
 email_entry.grid(row=0, column=4, padx=10, pady=10)
-okul = tk.Label(frame1, text="okul: ", font="Times 15", background="grey").grid(row=3, column=3, padx=10, pady=10)
-okul_entry = tk.Entry(frame1, font="Times 15")
-okul_entry.grid(row=3, column=4, padx=10, pady=10)
+soyad_entry = tk.Entry(frame1, font="Times 15")
+soyad_entry.grid(row=1, column=1, padx=10, pady=10)
 tel_entry = tk.Entry(frame1, font="Times 15")
 tel_entry.grid(row=1, column=4, padx=10, pady=10)
 boyv = tk.StringVar()
@@ -165,6 +164,19 @@ seker = tk.Label(frame1, text="açlık kan şekeri(mg / dL): ", font="Times 15",
 
 seker_entry = tk.Entry(frame1, font="Times 15", textvariable=sekV)
 seker_entry.grid(row=3, column=1, padx=10, pady=10)
+okul = tk.Label(frame1, text="okul: ", font="Times 15", background="grey").grid(row=3, column=3, padx=10, pady=10)
+okul_entry = tk.Entry(frame1, font="Times 15")
+okul_entry.grid(row=3, column=4, padx=10, pady=10)
+cinsVar = tk.IntVar()
+cinsiyet = tk.Label(frame1, text="cinsiyet: ", font="Times 15", background="grey").grid(row=4, column=0, padx=10,pady=10)
+
+boyut = (30, 30)
+im1 = Image.open('man_tr.png').resize(boyut)
+img1 = ImageTk.PhotoImage(im1)
+R2 = ttk.Radiobutton(frame1, image=img1, variable=cinsVa, value=1).grid(row=4, column=1, sticky="w")
+im2 = Image.open('woman_tr.png').resize(boyut)
+img2 = ImageTk.PhotoImage(im2)
+R3 = ttk.Radiobutton(frame1, image=img2, variable=cinsVar, value=2).grid(row=4, column=1, columnspan=1)
 kayitB = tk.Button(frame1, text="kişiyi kaydet", font="Times 15", command=kaydet).grid(row=4, column=4, padx=10,pady=10)
 
 frame2 = tk.Frame(window, bg="grey")
